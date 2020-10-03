@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
 
 import { Space, Text } from '@booksapp/ui';
 
-import { Book_book$key } from './__generated__/Book_book.graphql';
+import { BookCard_book$key } from './__generated__/BookCard_book.graphql';
 
 const Container = styled.View<{ index: number; css?: FlattenSimpleInterpolation }>`
   width: 120px;
@@ -22,18 +22,18 @@ const Banner = styled.Image<{ css?: FlattenSimpleInterpolation }>`
   ${(p) => p.css}
 `;
 
-interface BookProps {
-  book: Book_book$key;
+interface BookCardProps {
+  book: BookCard_book$key;
   index: number;
   containerCss?: FlattenSimpleInterpolation;
   bannerCss?: FlattenSimpleInterpolation;
   showName?: boolean;
 }
 
-const Book = ({ containerCss, bannerCss, showName = true, ...props }: BookProps) => {
-  const data = useFragment<Book_book$key>(
+const BookCard = ({ containerCss, bannerCss, showName = true, ...props }: BookCardProps) => {
+  const data = useFragment<BookCard_book$key>(
     graphql`
-      fragment Book_book on Book {
+      fragment BookCard_book on Book {
         id
         name
         bannerUrl
@@ -64,4 +64,4 @@ const Book = ({ containerCss, bannerCss, showName = true, ...props }: BookProps)
   );
 };
 
-export default Book;
+export default BookCard;

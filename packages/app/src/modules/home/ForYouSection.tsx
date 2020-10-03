@@ -4,7 +4,7 @@ import { graphql, usePaginationFragment } from 'react-relay/hooks';
 
 import { FlatListLoader } from '@booksapp/ui';
 
-import Book from './Book';
+import BookCard from './BookCard';
 import { ForYouSectionPaginationQuery } from './__generated__/ForYouSectionPaginationQuery.graphql';
 import { ForYouSection_query$key } from './__generated__/ForYouSection_query.graphql';
 
@@ -36,7 +36,7 @@ const ForYouSection = (props: ForYouSectionProps) => {
           edges {
             node {
               id
-              ...Book_book
+              ...BookCard_book
             }
           }
         }
@@ -59,7 +59,7 @@ const ForYouSection = (props: ForYouSectionProps) => {
       style={{ paddingVertical: 10 }}
       data={data.recommendedBooks.edges}
       keyExtractor={(item) => item?.node.id}
-      renderItem={({ item, index }) => <Book index={index} book={item?.node} />}
+      renderItem={({ item, index }) => <BookCard index={index} book={item?.node} />}
       onEndReached={loadMore}
       ListFooterComponent={isLoadingNext ? <FlatListLoader /> : null}
     />

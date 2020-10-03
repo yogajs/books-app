@@ -5,7 +5,7 @@ import { css, useTheme } from 'styled-components/native';
 
 import { Column, Text } from '@booksapp/ui';
 
-import Book from './Book';
+import BookCard from './BookCard';
 import { TrendingSection_query$key } from './__generated__/TrendingSection_query.graphql';
 
 const bookCss = css`
@@ -36,7 +36,7 @@ const TrendingSection = (props: TrendingSectionProps) => {
           edges {
             node {
               id
-              ...Book_book
+              ...BookCard_book
             }
           }
         }
@@ -56,7 +56,7 @@ const TrendingSection = (props: TrendingSectionProps) => {
       keyExtractor={(item) => item?.node.id}
       renderItem={({ item, index }) => (
         <Column style={{ position: 'relative' }}>
-          <Book index={index} book={item?.node} showName={false} containerCss={bookCss} bannerCss={bookBannerCss} />
+          <BookCard index={index} book={item?.node} showName={false} containerCss={bookCss} bannerCss={bookBannerCss} />
           <Text
             size="extraLarge"
             color="white"

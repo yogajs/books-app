@@ -10,7 +10,7 @@ import LibrarySection from './LibrarySection';
 import ReleasesSection from './ReleasesSection';
 import TrendingSection from './TrendingSection';
 import ForYouSection from './ForYouSection';
-
+import TodaysSuggestion from './TodaysSuggestion';
 import { HomeQuery } from './__generated__/HomeQuery.graphql';
 
 const containerCss = css`
@@ -28,7 +28,11 @@ const Home = () => {
         me {
           name
         }
+        readingsCount: readings(first: 1) {
+          count
+        }
         ...LastReadingSection_query
+        ...TodaysSuggestion_query
         ...LibrarySection_query
         ...ReleasesSection_query
         ...TrendingSection_query
@@ -47,24 +51,32 @@ const Home = () => {
           </Text>
           <Space height={10} />
           <Text size="title" weight="bold">
-            Continue reading
+            {data.readingsCount?.count ? 'Continue Reading' : "Today's suggestion"}
           </Text>
           <Space height={30} />
-          <LastReadingSection lastReading={data} />
+          {data.readingsCount?.count ? (
+            <LastReadingSection lastReading={data} />
+          ) : (
+            <TodaysSuggestion suggestion={data} />
+          )}
         </Column>
         <Space height={60} />
 
-        <Row align="center" justify="space-between" css={spacingCss}>
-          <Text size="button">My Library</Text>
-          <TouchableOpacity>
-            <Text size="label" color="primary">
-              See all
-            </Text>
-          </TouchableOpacity>
-        </Row>
-        <Space height={10} />
-        <LibrarySection readings={data} />
-        <Space height={30} />
+        {!!data.readingsCount?.count && (
+          <>
+            <Row align="center" justify="space-between" css={spacingCss}>
+              <Text size="button">My Library</Text>
+              <TouchableOpacity>
+                <Text size="label" color="primary">
+                  See all
+                </Text>
+              </TouchableOpacity>
+            </Row>
+            <Space height={10} />
+            <LibrarySection readings={data} />
+            <Space height={30} />
+          </>
+        )}
 
         <Text size="button" css={spacingCss}>
           Releases
