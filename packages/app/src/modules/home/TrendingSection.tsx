@@ -1,7 +1,6 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 import { graphql, useFragment } from 'react-relay/hooks';
-
 import { css, useTheme } from 'styled-components/native';
 
 import { Column, Text } from '@booksapp/ui';
@@ -29,11 +28,11 @@ interface TrendingSectionProps {
 }
 
 const TrendingSection = (props: TrendingSectionProps) => {
-  //@TODO - add trending filter = most readings last 7 days
   const data = useFragment<TrendingSection_query$key>(
     graphql`
       fragment TrendingSection_query on Query {
-        books(first: 10) {
+        trending: books(first: 10, filters: { trending: true })
+          @connection(key: "TrendingSection_trending", filters: []) {
           edges {
             node {
               id
@@ -53,7 +52,7 @@ const TrendingSection = (props: TrendingSectionProps) => {
       showsHorizontalScrollIndicator={false}
       horizontal
       style={{ paddingVertical: 10 }}
-      data={data.books.edges}
+      data={data.trending.edges}
       keyExtractor={(item) => item?.node.id}
       renderItem={({ item, index }) => (
         <Column style={{ position: 'relative' }}>

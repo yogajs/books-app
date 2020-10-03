@@ -97,7 +97,7 @@ export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) =
     return NullConnection;
   }
 
-  const defaultFilters = { orderBy: [{ sort: 'createdAt', direction: -1 }] };
+  const defaultFilters = filters.trending ? {} : { orderBy: [{ sort: 'createdAt', direction: -1 }] };
   const defaultConditions = {};
 
   const builtMongoConditions = buildMongoConditionsFromFilters(
@@ -111,7 +111,10 @@ export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) =
     ...builtMongoConditions.conditions,
   };
 
-  const aggregatePipeline = [{ $match: conditions }, ...builtMongoConditions.pipeline];
+  const aggregatePipeline = [
+    ...(Object.values(conditions).length ? [{ $match: conditions }] : []),
+    ...builtMongoConditions.pipeline,
+  ];
 
   const aggregate = BookModel.aggregate(aggregatePipeline);
 

@@ -94,6 +94,9 @@ input BookFilters {
 
   """Filter by category."""
   category: ID
+
+  """Filter by trending."""
+  trending: Boolean
 }
 
 """Used to order books"""

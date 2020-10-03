@@ -10,16 +10,19 @@ const Schema = new mongoose.Schema(
       type: String,
       description: 'The book name. ex: O Alienista',
       required: true,
+      index: true,
     },
     author: {
       type: String,
       description: 'The book author. ex: Machado de Assis',
       required: true,
+      index: true,
     },
     description: {
       type: String,
       description: 'The book description.',
       required: true,
+      index: true,
     },
     releaseYear: {
       type: Number,
@@ -50,6 +53,7 @@ const Schema = new mongoose.Schema(
       ref: 'Category',
       description: 'The book category _id.',
       //required: true,
+      index: true,
     },
     ...isActiveMongooseField,
     ...removedAtMongooseField,
@@ -62,8 +66,6 @@ const Schema = new mongoose.Schema(
     },
   },
 );
-
-Schema.index({ name: 1, author: 1, description: 1 });
 
 export interface IBook extends Document {
   name: string;
