@@ -9,10 +9,17 @@ const theme = {
     confirm: '#0E547F',
     warning: '#B30302',
     link: '#276EF1',
+    c5: '#383838',
+    c4: '#5C595A',
+    c3: '#959091',
+    c2: '#CFCFCF',
+    c1: '#DCDCDC',
   },
   fontSizes: {
+    extraLarge: '80px',
     h1: '50px',
     h2: '35px',
+    title: '28px',
     h3: '20px',
     button: '18px',
     label: '16px',
@@ -39,10 +46,17 @@ declare module 'styled-components' {
       confirm: string;
       warning: string;
       link: string;
+      c5: string;
+      c4: string;
+      c3: string;
+      c2: string;
+      c1: string;
     };
     fontSizes: {
+      extraLarge: string;
       h1: string;
       h2: string;
+      title: string;
       h3: string;
       button: string;
       text: string;

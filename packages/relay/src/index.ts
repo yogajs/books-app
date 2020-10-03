@@ -14,6 +14,7 @@ import {
   getMutationCallbacks,
 } from './mutationUtils';
 import UnavailableServiceError from './UnavailableServiceError';
+import InvalidSessionError from './InvalidSessionError';
 
 export {
   cacheHandler,
@@ -30,4 +31,5 @@ export {
   listRecordAddUpdater,
   getMutationCallbacks,
   UnavailableServiceError,
+  InvalidSessionError,
 };

@@ -1,35 +1,19 @@
 import React from 'react';
-import styled from 'styled-components/native';
+import { css } from 'styled-components/native';
 
-const Container = styled.SafeAreaView`
+import { InvalidSessionError, UnavailableServiceError } from '@booksapp/relay';
+
+import Text from './Text';
+import Space from './Space';
+import Column from './Column';
+
+const containerCss = css`
   background: #fff;
   padding: 20px;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
 `;
 
-const Title = styled.Text`
-  color: #333;
-  font-size: 25px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-`;
-
-const Error = styled.Text`
-  color: #999;
-  font-size: 14px;
-`;
-
-interface Error {
-  name: string;
-  message: string;
-  stack?: string;
-}
-
-interface State {
-  error: Error | null;
+interface IState {
+  error: Error | InvalidSessionError | UnavailableServiceError | null;
 }
 
 interface IErrorBoundary {
@@ -37,7 +21,7 @@ interface IErrorBoundary {
 }
 
 class ErrorBoundary extends React.Component<IErrorBoundary> {
-  state: State = { error: null };
+  state: IState = { error: null };
 
   componentDidCatch(error: Error) {
     this.setState({ error });
@@ -47,12 +31,21 @@ class ErrorBoundary extends React.Component<IErrorBoundary> {
     const { children } = this.props;
     const { error } = this.state;
 
+    if (error instanceof InvalidSessionError) {
+      // @TODO - do something
+    }
+
     if (error) {
       return (
-        <Container>
-          <Title>Oops, an error occurred. Try again later</Title>
-          <Error>Error: {error.message}</Error>
-        </Container>
+        <Column align="center" justify="center" flex={1} css={containerCss}>
+          <Text size="h3" weight="bold" center>
+            Oops, an error occurred. Try again later
+          </Text>
+          <Space height={20} />
+          <Text color="c3" center>
+            Error: {error.message}
+          </Text>
+        </Column>
       );
     }
 

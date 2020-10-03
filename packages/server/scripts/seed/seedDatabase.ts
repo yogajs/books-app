@@ -27,22 +27,18 @@ const categories = [
 const runScript = async () => {
   console.log(`⏳ Seeding...\n`);
 
-  try {
-    await createUser({
-      name: 'Jean',
-      surname: 'Leonco',
-      password: '123456',
-      email: { email: 'jean@booksapp.com', wasVerified: true },
-    });
-    console.log('👤 Jean user created\n');
-  } catch (err) {
-    console.log('⚠️ Jean user already created\n:', err);
-  }
-
   const books = 10; // 100 books
   const users = 100; // 1000 users
   let unfinishedReadings = 0;
   let finishedReadings = 0;
+
+  const jeanUser = await createUser({
+    name: 'Jean',
+    surname: 'Leonco',
+    password: '123456',
+    email: { email: 'jean@booksapp.com', wasVerified: true },
+  });
+  console.log('👤 Jean user created\n');
 
   for (let i = 0; i < categories.length; i++) {
     const name = categories[i];
@@ -53,6 +49,29 @@ const runScript = async () => {
     for (let i = 0; i < books; i++) {
       const book = await createBook({ categoryId: category._id });
       bookArr.push(book);
+    }
+
+    for (let i = 0; i < bookArr.length; i++) {
+      const book = bookArr[i];
+
+      const readingPerUser = faker.random.number({ min: 1, max: 7 }); // between 100 and 700 readings
+
+      for (let l = 0; l < readingPerUser; l++) {
+        const shouldFinishBook = faker.random.boolean();
+
+        await createReading({
+          bookId: book._id,
+          userId: jeanUser._id,
+          readPages: shouldFinishBook ? book.pages : faker.random.number({ min: 1, max: book.pages - 1 }),
+        });
+
+        if (shouldFinishBook) {
+          await createReview({ bookId: book._id, userId: jeanUser._id }); // max of 700 reviews
+          finishedReadings += 1;
+        } else {
+          unfinishedReadings += 1;
+        }
+      }
     }
 
     for (let i = 0; i < users; i++) {
