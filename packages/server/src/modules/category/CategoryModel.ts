@@ -9,6 +9,7 @@ const Schema = new mongoose.Schema(
       type: String,
       description: 'The category name. ex: Horror',
       required: true,
+      index: true,
     },
     ...isActiveMongooseField,
     ...removedAtMongooseField,
@@ -21,8 +22,6 @@ const Schema = new mongoose.Schema(
     },
   },
 );
-
-Schema.index({ name: 1 });
 
 export interface ICategory extends Document {
   name: string;

@@ -8,6 +8,11 @@ const commonCss = css<ColumnProps>`
   ${(p) => p.align && `align-items: ${p.align};`}
   ${(p) => p.flex && `flex: ${p.flex};`}
   ${(p) => p.css}
+  ${(p) =>
+    p.span &&
+    css`
+      width: ${(p.span * 100) / 24}%;
+    `}
 `;
 
 const Container = styled.View<ColumnProps>`

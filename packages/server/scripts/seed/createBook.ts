@@ -12,7 +12,7 @@ const createBook = async (args: DeepPartial<IBook>) => {
   const description = args.description || faker.commerce.productDescription();
   const releaseYear = args.releaseYear || getYear(faker.date.past());
   const pages = args.pages || faker.random.number(400);
-  const bannerUrl = args.bannerUrl || faker.image.imageUrl();
+  const bannerUrl = args.bannerUrl || faker.image.image();
 
   return new Book({ name, author, description, releaseYear, pages, bannerUrl, ...args }).save();
 };

@@ -7,6 +7,7 @@ export { default as Row } from './common/Row';
 export { default as Space } from './common/Space';
 export { default as Text } from './common/Text';
 export { default as TextInput } from './common/TextInput';
+export { default as FlatListLoader } from './common/FlatListLoader';
 
 // Form
 export { default as FormikButton } from './form/FormikButton';

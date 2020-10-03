@@ -11,12 +11,14 @@ const Schema = new mongoose.Schema(
       ref: 'User',
       description: 'The user who created this review.',
       required: true,
+      index: true,
     },
     bookId: {
       type: ObjectId,
       ref: 'Book',
       description: 'The book rated on this review.',
       required: true,
+      index: true,
     },
     rating: {
       type: Number,

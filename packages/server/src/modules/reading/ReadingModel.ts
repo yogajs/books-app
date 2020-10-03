@@ -11,12 +11,14 @@ const Schema = new mongoose.Schema(
       ref: 'User',
       description: 'The user that is reading.',
       required: true,
+      index: true,
     },
     bookId: {
       type: ObjectId,
       ref: 'Book',
       description: 'The book being read.',
       required: true,
+      index: true,
     },
     readPages: {
       type: Number,
