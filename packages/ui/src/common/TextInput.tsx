@@ -1,25 +1,29 @@
 import React from 'react';
 import { TextInputProps as ReactTextInputProps } from 'react-native';
-import styled, { css } from 'styled-components/native';
+import styled, { css, useTheme } from 'styled-components/native';
 
 import Row from './Row';
 import Column from './Column';
 import Space from './Space';
 import Text from './Text';
 
-const containerCss = css`
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #d9d9d9;
+const wrapperCss = css`
+  flex: 1;
 `;
 
-const Input = styled.TextInput<TextInputProps>`
+const containerCss = css`
+  width: 100%;
+  border-radius: 6px;
+  border: ${(p) => `1px solid ${p.theme.colors.c2}`};
+`;
+
+const Input = styled.TextInput<TextInputProps & { hasIcon: boolean }>`
   flex: 1;
-  height: 40px;
-  padding: 4px 16px;
+  padding: ${(p) => (p.hasIcon ? '4px 16px 4px 8px' : '4px 16px')};
   border: none;
   color: ${(p) => p.theme.colors.black};
-  font-size: 16px;
+  font-size: ${(p) => p.theme.fontSizes.label};
+  ${(p) => p.height && `height: 40px;`}
   ${(p) => p.css}
 `;
 
@@ -39,11 +43,15 @@ export interface TextInputProps extends ReactTextInputProps {
   icon?: React.ReactNode;
   label?: string;
   error?: string;
+  height?: number;
+  showErrorContainer?: boolean;
 }
 
-const TextInput = ({ label, icon, error, ...props }: TextInputProps) => {
+const TextInput = ({ label, icon, error, height = 40, showErrorContainer = true, ...props }: TextInputProps) => {
+  const theme = useTheme();
+
   return (
-    <Column style={{ width: '100%' }}>
+    <Column css={wrapperCss}>
       {label && (
         <>
           <Label>{label}</Label>
@@ -53,14 +61,18 @@ const TextInput = ({ label, icon, error, ...props }: TextInputProps) => {
       <Row align="center" css={containerCss}>
         {icon && (
           <>
-            {icon}
             <Space width={8} />
+            {icon}
           </>
         )}
-        <Input {...props} />
+        <Input placeholderTextColor={theme.colors.c3} hasIcon={!!icon} height={height} {...props} />
       </Row>
-      <Space height={4} />
-      <Error>{error}</Error>
+      {showErrorContainer && (
+        <>
+          <Space height={4} />
+          <Error>{error}</Error>
+        </>
+      )}
     </Column>
   );
 };
