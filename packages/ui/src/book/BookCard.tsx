@@ -4,7 +4,8 @@ import { graphql, useFragment } from 'react-relay/hooks';
 import { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components/native';
 
-import { Space, Text } from '@booksapp/ui';
+import Space from '../common/Space';
+import Text from '../common/Text';
 
 import { BookCard_book$key } from './__generated__/BookCard_book.graphql';
 
@@ -37,13 +38,11 @@ const BookCard = ({ containerCss, bannerCss, showName = true, ...props }: BookCa
         id
         name
         bannerUrl
-        rating
       }
     `,
     props.book,
   );
 
-  // @TODO - add rating
   return (
     <Container css={containerCss} {...props}>
       <TouchableOpacity>

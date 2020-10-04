@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import { graphql, useLazyLoadQuery } from 'react-relay/hooks';
 import { css } from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { Column, Row, Space, Text } from '@booksapp/ui';
 
@@ -23,6 +24,8 @@ const spacingCss = css`
 `;
 
 const Home = () => {
+  const navigation = useNavigation();
+
   const data = useLazyLoadQuery<HomeQuery>(
     graphql`
       query HomeQuery {
@@ -64,7 +67,7 @@ const Home = () => {
           <>
             <Row align="center" justify="space-between" css={spacingCss}>
               <Text size="button">My Library</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Library')}>
                 <Text size="label" color="primary">
                   See all
                 </Text>

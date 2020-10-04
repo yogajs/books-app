@@ -2,7 +2,8 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { graphql, useFragment } from 'react-relay/hooks';
 
-import BookCard from './BookCard';
+import { BookCard } from '@booksapp/ui';
+
 import { LibrarySection_query$key } from './__generated__/LibrarySection_query.graphql';
 
 interface LibrarySectionProps {
@@ -13,7 +14,7 @@ const LibrarySection = (props: LibrarySectionProps) => {
   const data = useFragment<LibrarySection_query$key>(
     graphql`
       fragment LibrarySection_query on Query {
-        readings(first: 10) @connection(key: "LibrarySection_readings", filters: []) {
+        readings(first: 10) {
           edges {
             node {
               id

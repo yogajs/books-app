@@ -2,7 +2,7 @@ import React from 'react';
 import { useFragment, graphql } from 'react-relay/hooks';
 import styled from 'styled-components/native';
 
-import { Column, Row, Space, Text } from '@booksapp/ui';
+import { Column, PercentageCompletedBar, Row, Space, Text } from '@booksapp/ui';
 
 import { MainBookCard_book$key } from './__generated__/MainBookCard_book.graphql';
 
@@ -11,22 +11,6 @@ const Banner = styled.Image`
   width: 160px;
   height: 240px;
   border-radius: 8px;
-`;
-
-const CompletedTrack = styled.View`
-  height: 5px;
-  border-radius: 5px;
-  position: relative;
-  width: 100%;
-  background: ${(p) => p.theme.colors.c1};
-`;
-
-const CompletedBar = styled.View<{ completed: number }>`
-  height: 5px;
-  border-radius: 5px;
-  position: absolute;
-  width: ${(p) => `${p.completed}%`};
-  background: ${(p) => p.theme.colors.primary};
 `;
 
 interface MainBookCardProps {
@@ -65,13 +49,7 @@ const MainBookCard = ({ percentageCompleted, footer, ...props }: MainBookCardPro
         {typeof percentageCompleted === 'number' && (
           <>
             <Space height={4} />
-            <Row align="center">
-              <CompletedTrack>
-                <CompletedBar completed={percentageCompleted} />
-              </CompletedTrack>
-              <Space width={10} />
-              <Text color="c3">{percentageCompleted}%</Text>
-            </Row>
+            <PercentageCompletedBar percentageCompleted={percentageCompleted} />
           </>
         )}
         {footer}

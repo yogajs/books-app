@@ -28,7 +28,7 @@ const runScript = async () => {
   console.log(`⏳ Seeding...\n`);
 
   const books = 10; // 100 books
-  const users = 100; // 1000 users
+  const users = 500; // 5000 users
   let unfinishedReadings = 0;
   let finishedReadings = 0;
 
@@ -54,23 +54,19 @@ const runScript = async () => {
     for (let i = 0; i < bookArr.length; i++) {
       const book = bookArr[i];
 
-      const readingPerUser = faker.random.number({ min: 1, max: 7 }); // between 100 and 700 readings
+      const shouldFinishBook = faker.random.boolean();
 
-      for (let l = 0; l < readingPerUser; l++) {
-        const shouldFinishBook = faker.random.boolean();
+      await createReading({
+        bookId: book._id,
+        userId: jeanUser._id,
+        readPages: shouldFinishBook ? book.pages : faker.random.number({ min: 1, max: book.pages - 1 }),
+      });
 
-        await createReading({
-          bookId: book._id,
-          userId: jeanUser._id,
-          readPages: shouldFinishBook ? book.pages : faker.random.number({ min: 1, max: book.pages - 1 }),
-        });
-
-        if (shouldFinishBook) {
-          await createReview({ bookId: book._id, userId: jeanUser._id }); // max of 700 reviews
-          finishedReadings += 1;
-        } else {
-          unfinishedReadings += 1;
-        }
+      if (shouldFinishBook) {
+        await createReview({ bookId: book._id, userId: jeanUser._id });
+        finishedReadings += 1;
+      } else {
+        unfinishedReadings += 1;
       }
     }
 
@@ -80,23 +76,19 @@ const runScript = async () => {
       for (let j = 0; j < bookArr.length; j++) {
         const book = bookArr[j];
 
-        const readingPerUser = faker.random.number({ min: 1, max: 7 }); // between 10000 and 70000 readings
+        const shouldFinishBook = faker.random.boolean();
 
-        for (let l = 0; l < readingPerUser; l++) {
-          const shouldFinishBook = faker.random.boolean();
+        await createReading({
+          bookId: book._id,
+          userId: user._id,
+          readPages: shouldFinishBook ? book.pages : faker.random.number({ min: 1, max: book.pages - 1 }),
+        });
 
-          await createReading({
-            bookId: book._id,
-            userId: user._id,
-            readPages: shouldFinishBook ? book.pages : faker.random.number({ min: 1, max: book.pages - 1 }),
-          });
-
-          if (shouldFinishBook) {
-            await createReview({ bookId: book._id, userId: user._id }); // max of 70000 reviews
-            finishedReadings += 1;
-          } else {
-            unfinishedReadings += 1;
-          }
+        if (shouldFinishBook) {
+          await createReview({ bookId: book._id, userId: user._id });
+          finishedReadings += 1;
+        } else {
+          unfinishedReadings += 1;
         }
       }
     }
