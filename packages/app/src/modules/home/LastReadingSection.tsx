@@ -31,14 +31,14 @@ const LastReadingSection = (props: LastReadingSectionProps) => {
   );
 
   const percentageCompleted = useMemo(() => {
-    const lastReading = data.lastReading.edges[0] ? data.lastReading.edges[0] : null;
+    const lastReading = data?.lastReading?.edges[0] ? data.lastReading.edges[0] : null;
 
     if (!lastReading || !lastReading.node.book) {
       return 0;
     }
 
     return Number(((lastReading.node.readPages! * 100) / lastReading.node.book.pages!).toFixed(0));
-  }, [data.lastReading.edges]);
+  }, [data.lastReading]);
 
   return <MainBookCard book={data.lastReading.edges[0]?.node.book} percentageCompleted={percentageCompleted} />;
 };

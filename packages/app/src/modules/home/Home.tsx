@@ -15,6 +15,7 @@ import { HomeQuery } from './__generated__/HomeQuery.graphql';
 
 const containerCss = css`
   padding: 24px 0;
+  background: ${(p) => p.theme.colors.background};
 `;
 
 const spacingCss = css`
@@ -28,7 +29,7 @@ const Home = () => {
         me {
           name
         }
-        readingsCount: readings(first: 1) {
+        readings(first: 10) {
           count
         }
         ...LastReadingSection_query
@@ -43,7 +44,7 @@ const Home = () => {
   );
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <Column flex={1} css={containerCss}>
         <Column css={spacingCss}>
           <Text size="button" color="c3">
@@ -51,18 +52,15 @@ const Home = () => {
           </Text>
           <Space height={10} />
           <Text size="title" weight="bold">
-            {data.readingsCount?.count ? 'Continue Reading' : "Today's suggestion"}
+            {data.readings?.count ? 'Continue Reading' : "Today's suggestion"}
           </Text>
           <Space height={30} />
-          {data.readingsCount?.count ? (
-            <LastReadingSection lastReading={data} />
-          ) : (
-            <TodaysSuggestion suggestion={data} />
-          )}
+          {/* @TODO - just query today's suggestion if there is not readings */}
+          {data.readings?.count ? <LastReadingSection lastReading={data} /> : <TodaysSuggestion suggestion={data} />}
         </Column>
         <Space height={60} />
 
-        {!!data.readingsCount?.count && (
+        {!!data.readings?.count && (
           <>
             <Row align="center" justify="space-between" css={spacingCss}>
               <Text size="button">My Library</Text>

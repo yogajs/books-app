@@ -6,17 +6,19 @@ import {
   GraphQLFloat,
   GraphQLInt,
 } from 'graphql';
-import { globalIdField } from 'graphql-relay';
+import { globalIdField, toGlobalId } from 'graphql-relay';
 
 import { GraphQLContext } from '../../types';
 
 import { registerType, NodeInterface } from '../../interface/NodeInterface';
 
-import { connectionDefinitions } from '../../graphql/connection/CustomConnectionType';
+import { connectionArgs, connectionDefinitions } from '../../graphql/connection/CustomConnectionType';
 import { mongooseIdResolver } from '../../core/mongoose/mongooseIdResolver';
 import { mongoDocumentStatusResolvers } from '../../core/graphql/mongoDocumentStatusResolvers';
 
 import { ReviewLoader } from '../../loader';
+import { ReviewConnection } from '../review/ReviewType';
+import ReviewFiltersInputType from '../review/filters/ReviewFiltersInputType';
 
 import Book from './BookLoader';
 
@@ -72,6 +74,20 @@ const BookTypeConfig: ConfigType = {
       type: GraphQLFloat,
       description: 'The book average rating based on user reviews',
       resolve: (obj, args, context) => ReviewLoader.loadBookAverageRating(context, obj._id),
+    },
+    reviews: {
+      type: ReviewConnection.connectionType,
+      description: 'The book reviews',
+      args: {
+        ...connectionArgs,
+        filters: {
+          type: ReviewFiltersInputType,
+        },
+      },
+      resolve: (obj, args, context) => {
+        const filters = { ...args.filters, book: toGlobalId('Book', obj._id) };
+        return ReviewLoader.loadReviews(context, { ...args, filters });
+      },
     },
     ...mongoDocumentStatusResolvers,
   }),
