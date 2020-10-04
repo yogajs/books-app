@@ -1,5 +1,5 @@
 declare module '*.jpg' {
-  import { ImgHTMLAttributes } from 'react';
-  const Image: NonNullable<ImgHTMLAttributes<any>['src']>;
+  import { ImageSourcePropType } from 'react-native';
+  const Image: ImageSourcePropType;
   export default Image;
 }

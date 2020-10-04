@@ -12,3 +12,7 @@ export { default as FlatListLoader } from './common/FlatListLoader';
 // Form
 export { default as FormikButton } from './form/FormikButton';
 export { default as FormikInput } from './form/FormikInput';
+
+// Book
+export { default as BookCard } from './book/BookCard';
+export { default as PercentageCompletedBar } from './book/PercentageCompletedBar';

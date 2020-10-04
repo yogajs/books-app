@@ -7,9 +7,7 @@ import Column from './Column';
 import Space from './Space';
 import Text from './Text';
 
-const wrapperCss = css`
-  flex: 1;
-`;
+const wrapperCss = css``;
 
 const containerCss = css`
   width: 100%;

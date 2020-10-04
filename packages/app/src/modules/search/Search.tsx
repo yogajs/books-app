@@ -103,7 +103,7 @@ const Search = () => {
 
   return (
     <Column flex={1} css={containerCss}>
-      <Column style={{ height: 70, marginHorizontal: 8 }}>
+      <Column>
         <TextInput
           value={searchValue}
           onChangeText={(value) => {
@@ -114,6 +114,7 @@ const Search = () => {
           showErrorContainer={false}
           icon={<Ionicons name="ios-search-outline" size={20} color={theme.colors.c3} />}
         />
+        <Space height={10} />
         <TouchableOpacity onPress={() => setDropdownVisible(true)}>
           <Text size="label" color="c5">
             {selectedCategory ? `Category: ${selectedCategory.name}` : 'All Categories'}
@@ -127,8 +128,8 @@ const Search = () => {
         keyExtractor={(item) => item.node.id}
         renderItem={({ item }) => <SearchBook book={item?.node} />}
         onEndReached={loadMore}
-        ListFooterComponent={isLoadingNext ? <FlatListLoader height={60} /> : null}
         onEndReachedThreshold={0.1}
+        ListFooterComponent={isLoadingNext ? <FlatListLoader height={60} /> : null}
       />
       <Space height={4} />
       <CategoryDropdown

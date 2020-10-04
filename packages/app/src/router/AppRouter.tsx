@@ -4,23 +4,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from 'styled-components';
 
-import { Column, Text } from '@booksapp/ui';
-
 import Home from '../modules/home/Home';
 import HomeShimmer from '../modules/home/HomeShimmer';
-import Profile from '../modules/profile/Profile';
 import Search from '../modules/search/Search';
 import SearchShimmer from '../modules/search/SearchShimmer';
+import Library from '../modules/library/Library';
+import LibraryShimmer from '../modules/library/LibraryShimmer';
+import Profile from '../modules/profile/Profile';
 
 const Tab = createBottomTabNavigator();
-
-const GenericTab = ({ name }) => {
-  return (
-    <Column flex={1} align="center" justify="center">
-      <Text>{name}</Text>
-    </Column>
-  );
-};
 
 // @TODO - add shimmer loader
 
@@ -40,7 +32,13 @@ const SearchSuspense = () => {
   );
 };
 
-const Library = () => <GenericTab name="Library" />;
+const LibrarySuspense = () => {
+  return (
+    <Suspense fallback={<LibraryShimmer />}>
+      <Library />
+    </Suspense>
+  );
+};
 
 const App = () => {
   const theme = useTheme();
@@ -73,7 +71,7 @@ const App = () => {
     >
       <Tab.Screen name="Home" component={HomeSuspense} />
       <Tab.Screen name="Search" component={SearchSuspense} />
-      <Tab.Screen name="Library" component={Library} />
+      <Tab.Screen name="Library" component={LibrarySuspense} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

@@ -2,9 +2,8 @@ import React, { useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { graphql, usePaginationFragment } from 'react-relay/hooks';
 
-import { FlatListLoader } from '@booksapp/ui';
+import { FlatListLoader, BookCard } from '@booksapp/ui';
 
-import BookCard from './BookCard';
 import { ForYouSectionPaginationQuery } from './__generated__/ForYouSectionPaginationQuery.graphql';
 import { ForYouSection_query$key } from './__generated__/ForYouSection_query.graphql';
 
@@ -61,6 +60,7 @@ const ForYouSection = (props: ForYouSectionProps) => {
       keyExtractor={(item) => item?.node.id}
       renderItem={({ item, index }) => <BookCard index={index} book={item?.node} />}
       onEndReached={loadMore}
+      onEndReachedThreshold={0.1}
       ListFooterComponent={isLoadingNext ? <FlatListLoader /> : null}
     />
   );
