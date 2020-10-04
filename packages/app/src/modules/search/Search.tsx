@@ -1,31 +1,21 @@
 import React, { useCallback, useState, useTransition } from 'react';
-import { Dimensions, FlatList, TouchableOpacity } from 'react-native';
-import { graphql, useLazyLoadQuery, useRefetchableFragment } from 'react-relay/hooks';
-import styled, { css, useTheme } from 'styled-components/native';
+import { FlatList, TouchableOpacity } from 'react-native';
+import { graphql, useLazyLoadQuery, usePaginationFragment } from 'react-relay/hooks';
+import { css, useTheme } from 'styled-components/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Column, Space, Text, TextInput } from '@booksapp/ui';
+import { Column, FlatListLoader, Space, Text, TextInput } from '@booksapp/ui';
 import { useDebounce } from '@booksapp/hooks';
 
 import { SearchQuery } from './__generated__/SearchQuery.graphql';
 import { SearchRefetchQuery } from './__generated__/SearchRefetchQuery.graphql';
 import { Search_query$key } from './__generated__/Search_query.graphql';
 import CategoryDropdown from './CategoryDropdown';
+import SearchBook from './SearchBook';
 
 const containerCss = css`
   padding: 24px 8px 0;
   background: ${(p) => p.theme.colors.background};
-`;
-
-const dimensions = Dimensions.get('window');
-
-const width = (dimensions.width - 8 - 16) / 2;
-
-const Banner = styled.Image<{ index: number }>`
-  width: ${`${width}px`};
-  height: ${`${width * 1.1}px`};
-  border-radius: 8px;
-  margin: 4px;
 `;
 
 const Search = () => {
@@ -34,17 +24,9 @@ const Search = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [startTransition, isPending] = useTransition();
 
-  const data = useLazyLoadQuery<SearchQuery>(
+  const query = useLazyLoadQuery<SearchQuery>(
     graphql`
       query SearchQuery {
-        categories {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
         ...Search_query
         ...CategoryDropdown_query
       }
@@ -52,8 +34,11 @@ const Search = () => {
     { visible: isDropdownVisible },
   );
 
-  // @TODO - fix weird cache
-  const [search, refetch] = useRefetchableFragment<SearchRefetchQuery, Search_query$key>(
+  // @TODO - fix weird cache and refetch while searching
+  const { data, hasNext, loadNext, isLoadingNext, refetch } = usePaginationFragment<
+    SearchRefetchQuery,
+    Search_query$key
+  >(
     graphql`
       fragment Search_query on Query
       @argumentDefinitions(
@@ -62,8 +47,7 @@ const Search = () => {
         filters: { type: BookFilters, defaultValue: { search: "" } }
       )
       @refetchable(queryName: "SearchRefetchQuery") {
-        id
-        books(first: $first, after: $after, filters: $filters) @connection(key: "Search_books", filters: []) {
+        books(first: $first, after: $after, filters: $filters) @connection(key: "Search_books") {
           endCursorOffset
           startCursorOffset
           count
@@ -77,13 +61,13 @@ const Search = () => {
             cursor
             node {
               id
-              bannerUrl
+              ...SearchBook_book
             }
           }
         }
       }
     `,
-    data,
+    query,
   );
 
   const refetchSearch = useCallback(
@@ -98,16 +82,22 @@ const Search = () => {
   const handleSearch = useDebounce(refetchSearch, 500, { leading: false });
 
   const handleSelectCategory = useCallback(
-    (category?: string) => {
-      const selected = data.categories.edges.find((edge) => edge.node.id === category);
-
-      setSelectedCategory(selected);
+    (category?: any) => {
+      setSelectedCategory(category);
       startTransition(() => {
-        refetch({ first: 20, filters: { search: searchValue, ...(category ? { category } : {}) } });
+        refetch({ first: 20, filters: { search: searchValue, ...(category ? { category: category.id } : {}) } });
       });
     },
-    [data.categories.edges, refetch, searchValue],
+    [refetch, searchValue],
   );
+
+  const loadMore = useCallback(() => {
+    if (isLoadingNext || !hasNext) {
+      return;
+    }
+
+    loadNext(20);
+  }, [hasNext, isLoadingNext, loadNext]);
 
   const theme = useTheme();
 
@@ -126,27 +116,23 @@ const Search = () => {
         />
         <TouchableOpacity onPress={() => setDropdownVisible(true)}>
           <Text size="label" color="c5">
-            {selectedCategory ? `Category: ${selectedCategory.node.name}` : 'All Categories'}
+            {selectedCategory ? `Category: ${selectedCategory.name}` : 'All Categories'}
           </Text>
         </TouchableOpacity>
       </Column>
       <Space height={4} />
       <FlatList
         showsVerticalScrollIndicator={false}
-        numColumns={2}
-        style={{ flex: 1, paddingVertical: 20 }}
-        data={search.books.edges}
+        data={data.books.edges}
         keyExtractor={(item) => item.node.id}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity>
-            <Banner source={{ uri: item?.node.bannerUrl }} index={index} />
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => <SearchBook book={item?.node} />}
+        onEndReached={loadMore}
+        ListFooterComponent={isLoadingNext ? <FlatListLoader height={60} /> : null}
+        onEndReachedThreshold={0.1}
       />
       <Space height={4} />
-
       <CategoryDropdown
-        catogories={data}
+        catogories={query}
         visible={isDropdownVisible}
         handleClose={() => setDropdownVisible(false)}
         handleSelectCategory={handleSelectCategory}

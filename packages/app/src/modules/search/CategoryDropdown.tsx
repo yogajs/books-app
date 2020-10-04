@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, ModalProps, StatusBar, TouchableOpacity } from 'react-native';
 import { graphql, useFragment } from 'react-relay/hooks';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Column, Text } from '@booksapp/ui';
 
@@ -9,7 +10,7 @@ import { CategoryDropdown_query$key } from './__generated__/CategoryDropdown_que
 interface CategoryDropdownProps extends ModalProps {
   handleClose(): void;
   catogories: CategoryDropdown_query$key;
-  handleSelectCategory(category?: string): void;
+  handleSelectCategory(category?): void;
 }
 
 const CategoryDropdown = ({ handleClose, handleSelectCategory, catogories, ...props }: CategoryDropdownProps) => {
@@ -50,7 +51,7 @@ const CategoryDropdown = ({ handleClose, handleSelectCategory, catogories, ...pr
             key={edge?.node.id}
             style={{ padding: 10 }}
             onPress={() => {
-              handleSelectCategory(edge?.node.id);
+              handleSelectCategory(edge?.node);
               handleClose();
             }}
           >

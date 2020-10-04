@@ -55,6 +55,7 @@ const Home = () => {
             {data.readings?.count ? 'Continue Reading' : "Today's suggestion"}
           </Text>
           <Space height={30} />
+          {/* @TODO - just query today's suggestion if there is not readings */}
           {data.readings?.count ? <LastReadingSection lastReading={data} /> : <TodaysSuggestion suggestion={data} />}
         </Column>
         <Space height={60} />

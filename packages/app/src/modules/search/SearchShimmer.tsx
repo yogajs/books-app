@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { css } from 'styled-components';
 
-import { Column, Space } from '@booksapp/ui';
+import { Column, Row, Space } from '@booksapp/ui';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -30,12 +30,23 @@ const SearchShimmer = () => {
       <Space height={4} />
       <FlatList
         showsVerticalScrollIndicator={false}
-        numColumns={2}
-        style={{ flex: 1, paddingVertical: 20 }}
         data={data}
         keyExtractor={(item, index) => String(index)}
         renderItem={() => (
-          <ShimmerPlaceHolder width={width} height={width * 1.1} style={{ borderRadius: 8, margin: 4 }} />
+          <Row align="center" style={{ marginVertical: 10 }}>
+            <ShimmerPlaceHolder width={90} height={110} style={{ borderRadius: 8 }} />
+            <Space width={12} />
+            <Column>
+              <ShimmerPlaceHolder width={160} height={20} />
+              <Space height={4} />
+              <ShimmerPlaceHolder width={100} height={16} />
+              <Space height={12} />
+              <ShimmerPlaceHolder width={140} height={14} />
+              <Space height={4} />
+              <ShimmerPlaceHolder width={110} height={16} />
+              <Space height={4} />
+            </Column>
+          </Row>
         )}
       />
       <Space height={4} />

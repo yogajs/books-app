@@ -33,6 +33,9 @@ type Book implements Node {
   """The book average rating based on user reviews"""
   rating: Float
 
+  """The book reviews"""
+  reviews(after: String, first: Int, before: String, last: Int, filters: ReviewFilters): ReviewConnection
+
   """The soft delete status."""
   isActive: Boolean
 
