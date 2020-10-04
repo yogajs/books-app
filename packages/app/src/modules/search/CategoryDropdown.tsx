@@ -2,15 +2,28 @@ import React from 'react';
 import { Modal, ModalProps, StatusBar, TouchableOpacity } from 'react-native';
 import { graphql, useFragment } from 'react-relay/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled, { useTheme } from 'styled-components/native';
 
 import { Column, Text } from '@booksapp/ui';
 
 import { CategoryDropdown_query$key } from './__generated__/CategoryDropdown_query.graphql';
 
+const CloseButton = styled.TouchableOpacity`
+  background: #fff;
+  height: 40px;
+  width: 40px;
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+`;
+
 interface CategoryDropdownProps extends ModalProps {
   handleClose(): void;
   catogories: CategoryDropdown_query$key;
-  handleSelectCategory(category?): void;
+  handleSelectCategory(category?: any): void;
 }
 
 const CategoryDropdown = ({ handleClose, handleSelectCategory, catogories, ...props }: CategoryDropdownProps) => {
@@ -31,8 +44,10 @@ const CategoryDropdown = ({ handleClose, handleSelectCategory, catogories, ...pr
     catogories,
   );
 
+  const theme = useTheme();
+
   return (
-    <Modal transparent animationType="none" onRequestClose={handleClose} {...props}>
+    <Modal transparent animationType="slide" onRequestClose={handleClose} {...props}>
       <StatusBar backgroundColor="rgba(0,0,0,0.7)" barStyle="light-content" />
       <Column align="center" justify="center" flex={1} style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
         <TouchableOpacity
@@ -61,6 +76,9 @@ const CategoryDropdown = ({ handleClose, handleSelectCategory, catogories, ...pr
           </TouchableOpacity>
         ))}
       </Column>
+      <CloseButton onPress={handleClose}>
+        <Ionicons name="ios-arrow-back" size={20} color={theme.colors.c5} />
+      </CloseButton>
     </Modal>
   );
 };
