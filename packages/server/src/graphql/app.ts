@@ -129,7 +129,7 @@ router.all(
     graphqlHttp(
       async (request, ctx, koaContext): Promise<OptionsData> => {
         const { dataloaders, user } = koaContext;
-        const { authorization, appversion, appbuild, appplatform, timezone = 'America/Sao_Paulo' } = request.header;
+        const { authorization, appversion, appbuild, appplatform, timezone } = request.header;
 
         if (process.env.NODE_ENV !== 'test') {
           console.info('Handling request', {

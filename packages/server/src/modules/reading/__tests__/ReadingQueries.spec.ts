@@ -344,4 +344,46 @@ describe('Reading queries', () => {
     expect(result.data?.readings.edges.length).toBe(6);
     expect(sanitizeTestObject(result.data)).toMatchSnapshot();
   });
+
+  it('should query only active readings', async () => {
+    const user = await createUser();
+
+    for (let i = 0; i < 5; i++) {
+      await createReading();
+    }
+
+    for (let i = 0; i < 5; i++) {
+      await createReading({ isActive: false });
+    }
+
+    for (let i = 0; i < 5; i++) {
+      await createReading({ removedAt: new Date() });
+    }
+
+    const query = gql`
+      query Q {
+        readings {
+          edges {
+            node {
+              id
+              readPages
+              book {
+                name
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const rootValue = {};
+    const context = await getContext({ user });
+    const variables = {};
+
+    const result = await graphql(schema, query, rootValue, context, variables);
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data?.readings).not.toBe(null);
+    expect(result.data?.readings.edges.length).toBe(5);
+  });
 });

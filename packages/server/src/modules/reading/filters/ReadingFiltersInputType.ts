@@ -1,4 +1,6 @@
-import { GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLBoolean } from 'graphql';
+import { GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLBoolean, GraphQLID } from 'graphql';
+
+import { getObjectId } from '../../../common/utils';
 
 import CreatedAtOrderingInputType, { CreatedAtOrdering } from '../../../core/graphql/enum/CreatedAtOrderingInputType';
 
@@ -15,6 +17,11 @@ export const readingFilterMapping: FilterMapping = {
   orderBy: {
     type: FILTER_CONDITION_TYPE.AGGREGATE_PIPELINE,
     pipeline: (value: CreatedAtOrdering[]) => [{ $sort: buildSortFromOrderByArg(value) }],
+  },
+  book: {
+    type: FILTER_CONDITION_TYPE.MATCH_1_TO_1,
+    key: 'bookId',
+    format: (book: string) => getObjectId(book),
   },
   finished: {
     type: FILTER_CONDITION_TYPE.AGGREGATE_PIPELINE,
@@ -67,6 +74,10 @@ const ReadingsFiltersInputType: GraphQLInputObjectType = new GraphQLInputObjectT
     finished: {
       type: GraphQLBoolean,
       description: 'Filter by book finished status.',
+    },
+    book: {
+      type: GraphQLID,
+      description: 'Filter by book.',
     },
   }),
 });

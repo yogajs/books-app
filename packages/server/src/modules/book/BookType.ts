@@ -5,6 +5,7 @@ import {
   GraphQLString,
   GraphQLFloat,
   GraphQLInt,
+  GraphQLBoolean,
 } from 'graphql';
 import { globalIdField, toGlobalId } from 'graphql-relay';
 
@@ -19,6 +20,8 @@ import { mongoDocumentStatusResolvers } from '../../core/graphql/mongoDocumentSt
 import { ReviewLoader } from '../../loader';
 import { ReviewConnection } from '../review/ReviewType';
 import ReviewFiltersInputType from '../review/filters/ReviewFiltersInputType';
+
+import ReadingModel from '../reading/ReadingModel';
 
 import Book from './BookLoader';
 
@@ -87,6 +90,17 @@ const BookTypeConfig: ConfigType = {
       resolve: (obj, args, context) => {
         const filters = { ...args.filters, book: toGlobalId('Book', obj._id) };
         return ReviewLoader.loadReviews(context, { ...args, filters });
+      },
+    },
+    meCanReview: {
+      type: GraphQLBoolean,
+      description: 'Retuns if the context user can review the book',
+      resolve: async (obj, args, context) => {
+        const { user } = context;
+
+        const reading = await ReadingModel.findOne({ userId: user._id, bookId: obj._id });
+
+        return reading && reading.readPages === obj.pages;
       },
     },
     ...mongoDocumentStatusResolvers,

@@ -16,7 +16,6 @@ export default class User {
   _id: Types.ObjectId;
   name: string;
   surname: string;
-  password?: string;
   email: IEmailSchema;
   lang?: string;
   isActive: boolean;
@@ -43,7 +42,7 @@ const viewerCanSee = (context: GraphQLContext, data: IUser) => {
     return false;
   }
 
-  return context.user!._id.toString() === data._id.toString();
+  return true;
 };
 
 export const getLoader = () => new DataLoader<DataLoaderKey, IUser>((ids) => mongooseLoader(UserModel, ids));

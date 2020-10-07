@@ -87,7 +87,7 @@ export const loadReadings = async (context: GraphQLContext, args: LoadReadingsAr
   const { filters = {} } = args;
 
   const defaultFilters = { orderBy: [{ sort: 'createdAt', direction: -1 }] };
-  const defaultConditions = { userId: user._id };
+  const defaultConditions = { userId: user._id, isActive: true, removedAt: null };
 
   const builtMongoConditions = buildMongoConditionsFromFilters(
     context,

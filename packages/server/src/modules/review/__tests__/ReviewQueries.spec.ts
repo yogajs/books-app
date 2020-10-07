@@ -364,4 +364,46 @@ describe('Review queries', () => {
     expect(result.data?.reviews.edges.length).toBe(3);
     expect(result.data?.reviews.edges[0].node.user.name).toBe(user.name);
   });
+
+  it('should query only active reviews', async () => {
+    const user = await createUser();
+
+    for (let i = 0; i < 5; i++) {
+      await createReview();
+    }
+
+    for (let i = 0; i < 5; i++) {
+      await createReview({ isActive: false });
+    }
+
+    for (let i = 0; i < 5; i++) {
+      await createReview({ removedAt: new Date() });
+    }
+
+    const query = gql`
+      query Q {
+        reviews {
+          edges {
+            node {
+              id
+              rating
+              user {
+                name
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const rootValue = {};
+    const context = await getContext({ user });
+    const variables = {};
+
+    const result = await graphql(schema, query, rootValue, context, variables);
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data?.reviews).not.toBe(null);
+    expect(result.data?.reviews.edges.length).toBe(5);
+  });
 });

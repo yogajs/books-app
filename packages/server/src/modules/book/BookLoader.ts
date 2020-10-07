@@ -98,7 +98,7 @@ export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) =
   }
 
   const defaultFilters = filters.trending ? {} : { orderBy: [{ sort: 'createdAt', direction: -1 }] };
-  const defaultConditions = {};
+  const defaultConditions = { isActive: true, removedAt: null };
 
   const builtMongoConditions = buildMongoConditionsFromFilters(
     context,

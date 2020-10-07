@@ -83,7 +83,7 @@ export const loadCategories = async (context: GraphQLContext, args: LoadCategori
   const { filters = {} } = args;
 
   const defaultFilters = { orderBy: [{ sort: 'createdAt', direction: -1 }] };
-  const defaultConditions = {};
+  const defaultConditions = { isActive: true, removedAt: null };
 
   const builtMongoConditions = buildMongoConditionsFromFilters(
     context,

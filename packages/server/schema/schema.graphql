@@ -36,6 +36,9 @@ type Book implements Node {
   """The book reviews"""
   reviews(after: String, first: Int, before: String, last: Int, filters: ReviewFilters): ReviewConnection
 
+  """Retuns if the context user can review the book"""
+  meCanReview: Boolean
+
   """The soft delete status."""
   isActive: Boolean
 
@@ -383,6 +386,9 @@ input ReadingFilters {
 
   """Filter by book finished status."""
   finished: Boolean
+
+  """Filter by book."""
+  book: ID
 }
 
 input ReadingRemoveInput {

@@ -480,4 +480,46 @@ describe('Book queries', () => {
     expect(result.data?.books.edges[1].node.name).toBe(book2.name);
     expect(result.data?.books.edges[2].node.name).toBe(book1.name);
   });
+
+  it('should query only active books', async () => {
+    const user = await createUser();
+
+    for (let i = 0; i < 5; i++) {
+      await createBook();
+    }
+
+    for (let i = 0; i < 5; i++) {
+      await createBook({ isActive: false });
+    }
+
+    for (let i = 0; i < 5; i++) {
+      await createBook({ removedAt: new Date() });
+    }
+
+    const query = gql`
+      query Q {
+        books {
+          count
+          edges {
+            node {
+              id
+              name
+              author
+              description
+            }
+          }
+        }
+      }
+    `;
+
+    const rootValue = {};
+    const context = await getContext({ user });
+    const variables = {};
+
+    const result = await graphql(schema, query, rootValue, context, variables);
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data?.books).not.toBe(null);
+    expect(result.data?.books.edges.length).toBe(5);
+  });
 });
