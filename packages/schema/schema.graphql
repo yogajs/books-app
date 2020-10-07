@@ -398,6 +398,8 @@ input ReadingRemoveInput {
 }
 
 type ReadingRemovePayload {
+  deletedID: String
+
   """Default success field resolver for mutations"""
   success: String
 

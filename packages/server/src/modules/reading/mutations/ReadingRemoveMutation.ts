@@ -1,5 +1,5 @@
-import { GraphQLNonNull, GraphQLID } from 'graphql';
-import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
+import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
+import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 
 import ReadingModel from '../ReadingModel';
 
@@ -37,11 +37,16 @@ const mutation = mutationWithClientMutationId({
     ReadingLoader.clearAndPrimeCache(context, reading._id, reading);
 
     return {
+      id: reading._id,
       success: t('book', 'BookRemovedWithSuccess'),
       error: null,
     };
   },
   outputFields: {
+    deletedID: {
+      type: GraphQLString,
+      resolve: async ({ id }) => toGlobalId('Readings', id),
+    },
     ...successField,
     ...errorField,
   },

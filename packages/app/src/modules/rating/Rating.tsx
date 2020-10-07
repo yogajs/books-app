@@ -4,7 +4,7 @@ import { Row } from '@booksapp/ui';
 
 import Star from './Star';
 
-interface RatingProps {
+export interface RatingProps {
   initialRating?: number;
   onFinishRating?(rating: number): void;
   size?: number;

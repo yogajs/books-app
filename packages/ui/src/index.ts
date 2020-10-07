@@ -8,6 +8,7 @@ export { default as Space } from './common/Space';
 export { default as Text } from './common/Text';
 export { default as TextInput } from './common/TextInput';
 export { default as FlatListLoader } from './common/FlatListLoader';
+export { default as BottomSheet, BottomSheetProps } from './common/BottomSheet';
 
 // Form
 export { default as FormikButton } from './form/FormikButton';

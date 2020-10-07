@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { graphql, useFragment } from 'react-relay/hooks';
 import { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 
 import Space from '../common/Space';
 import Text from '../common/Text';
@@ -29,9 +30,12 @@ interface BookCardProps {
   containerCss?: FlattenSimpleInterpolation;
   bannerCss?: FlattenSimpleInterpolation;
   showName?: boolean;
+  route?: string;
 }
 
-const BookCard = ({ containerCss, bannerCss, showName = true, ...props }: BookCardProps) => {
+const BookCard = ({ containerCss, bannerCss, showName = true, route = 'Book', ...props }: BookCardProps) => {
+  const navigation = useNavigation();
+
   const data = useFragment<BookCard_book$key>(
     graphql`
       fragment BookCard_book on Book {
@@ -45,7 +49,7 @@ const BookCard = ({ containerCss, bannerCss, showName = true, ...props }: BookCa
 
   return (
     <Container css={containerCss} {...props}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate(route, { id: data.id })}>
         <Banner source={{ uri: data.bannerUrl }} css={bannerCss} />
 
         {

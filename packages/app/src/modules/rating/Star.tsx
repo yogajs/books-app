@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Animated, TouchableOpacity } from 'react-native';
 import { useTheme } from 'styled-components';
 
@@ -13,8 +13,6 @@ interface IStar {
 }
 
 const Star = ({ position, handleRatingChange, fill, size = 20, disabled }: IStar) => {
-  const [selected, setSelected] = useState(false);
-
   const springValue = useRef(new Animated.Value(1)).current;
 
   const handleRated = useCallback(() => {
@@ -27,10 +25,8 @@ const Star = ({ position, handleRatingChange, fill, size = 20, disabled }: IStar
       useNativeDriver: true,
     }).start();
 
-    setSelected(!selected);
-
     handleRatingChange(position);
-  }, [handleRatingChange, position, selected, springValue]);
+  }, [handleRatingChange, position, springValue]);
 
   const theme = useTheme();
 
@@ -39,7 +35,7 @@ const Star = ({ position, handleRatingChange, fill, size = 20, disabled }: IStar
       <Animated.Image
         source={star}
         style={{
-          margin: 3,
+          marginHorizontal: 3,
           tintColor: fill ? theme.colors.primary : theme.colors.c1,
           width: size,
           height: size,

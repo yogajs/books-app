@@ -23,7 +23,18 @@ const ContinueReading = (props: ContinueReadingProps) => {
       @refetchable(queryName: "ContinueReadingPaginationQuery") {
         unfinished: readings(first: $first, after: $after, filters: { finished: false })
           @connection(key: "ContinueReading_unfinished", filters: []) {
+          count
+          totalCount
+          endCursorOffset
+          startCursorOffset
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
           edges {
+            cursor
             node {
               id
               ...ReadingCard_reading

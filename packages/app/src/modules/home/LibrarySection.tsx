@@ -14,8 +14,19 @@ const LibrarySection = (props: LibrarySectionProps) => {
   const data = useFragment<LibrarySection_query$key>(
     graphql`
       fragment LibrarySection_query on Query {
-        readings(first: 10) {
+        readings(first: 10) @connection(key: "LibrarySection_readings", filters: []) {
+          count
+          totalCount
+          endCursorOffset
+          startCursorOffset
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
           edges {
+            cursor
             node {
               id
               book {

@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from 'styled-components';
@@ -11,6 +12,8 @@ import SearchShimmer from '../modules/search/SearchShimmer';
 import Library from '../modules/library/Library';
 import LibraryShimmer from '../modules/library/LibraryShimmer';
 import Profile from '../modules/profile/Profile';
+import BookDetails from '../modules/bookDetails/BookDetails';
+import Review from '../modules/review/Review';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +43,7 @@ const LibrarySuspense = () => {
   );
 };
 
-const App = () => {
+const AppTabs = () => {
   const theme = useTheme();
 
   return (
@@ -74,6 +77,18 @@ const App = () => {
       <Tab.Screen name="Library" component={LibrarySuspense} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
+  );
+};
+
+const Stack = createStackNavigator();
+
+const App = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerBackTitle: false }} mode="modal">
+      <Stack.Screen name="App" component={AppTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="Book" component={BookDetails} options={{ title: '', headerShown: false }} />
+      <Stack.Screen name="Review" component={Review} options={{ title: '', headerShown: false }} />
+    </Stack.Navigator>
   );
 };
 

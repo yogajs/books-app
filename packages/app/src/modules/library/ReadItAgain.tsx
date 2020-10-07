@@ -21,8 +21,19 @@ const ReadItAgain = (props: ReadItAgainProps) => {
       @argumentDefinitions(first: { type: Int, defaultValue: 10 }, after: { type: String })
       @refetchable(queryName: "ReadItAgainPaginationQuery") {
         finished: readings(first: $first, after: $after, filters: { finished: true })
-          @connection(key: "ReadItAgain_finished") {
+          @connection(key: "ReadItAgain_finished", filters: []) {
+          count
+          totalCount
+          endCursorOffset
+          startCursorOffset
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
           edges {
+            cursor
             node {
               id
               book {

@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { graphql, useFragment } from 'react-relay/hooks';
 import { css } from 'styled-components';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { Column, Row, Space, Text } from '@booksapp/ui';
 
@@ -42,8 +43,10 @@ const SearchBook = (props: SearchBookProps) => {
     props.book,
   );
 
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Book', { id: data.id })}>
       <Row align="center" css={containerCss}>
         <Banner source={{ uri: data.bannerUrl }} />
         <Space width={12} />

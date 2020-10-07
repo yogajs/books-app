@@ -42,6 +42,7 @@ declare module 'styled-components' {
       accent: string;
       black: string;
       background: string;
+      statusBar: string;
       white: string;
       text: string;
       confirm: string;

@@ -5,6 +5,7 @@
   "module": "src/index.ts",
   "dependencies": {
     "@booksapp/relay": "^0.0.1",
+    "@react-navigation/native": "^5.7.4",
     "formik": "^2.1.6",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-native": "0.63.2",

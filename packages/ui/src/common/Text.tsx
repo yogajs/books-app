@@ -8,6 +8,7 @@ const Container = styled.Text<TextProps>`
   font-weight: ${(p) => (p.weight ? p.theme.fontWeights[p.weight] || p.weight : p.theme.fontWeights.regular)};
   ${(p) => p.height && `line-height: ${p.height}px;`}
   ${(p) => p.center && 'text-align: center;'}
+  ${(p) => p.italic && ' font-style: italic;'}
   ${(p) => p.css}
 `;
 
@@ -19,6 +20,7 @@ interface TextProps extends RNTextProps {
   children: React.ReactNode;
   css?: any;
   center?: boolean;
+  italic?: boolean;
 }
 
 const Text = ({ children, ...props }: TextProps) => {
